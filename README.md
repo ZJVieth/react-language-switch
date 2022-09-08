@@ -13,17 +13,18 @@ npm install --save react-language-switch
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+import React from 'react'
 
-import MyComponent from 'react-language-switch'
-import 'react-language-switch/dist/index.css'
+import LanguageProvider, { LanguageDisplay, LanguageSelect } from 'react-language-switch'
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
+
 ```
+
+## Future Features
+[] Storing language locally
+[] Changing header and meta data per language
+[] Access and change current language outside of DOM
+
 
 ## License
 

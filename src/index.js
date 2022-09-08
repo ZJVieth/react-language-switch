@@ -2,10 +2,9 @@ import React, { createContext, useState } from "react";
 
 
 export const LanguageContext = createContext()
-export default LanguageContext
 
 
-export function LanguageProvider({ children, languages, init, defaultTo }) {
+export default function LanguageProvider({ children, languages, init, defaultTo }) {
 
   defaultTo = defaultTo ? defaultTo : (init ? init : 'en')
 
