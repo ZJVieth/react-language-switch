@@ -1,4 +1,4 @@
-# react-language-switch (WIP)
+# react-language-switch
 
 > Simple context-based language-differentiating display and selector components for react. Implements both switches for inline editing and json-based content.
 
