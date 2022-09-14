@@ -36,19 +36,28 @@ const exampleHeader = {
   ]
 }
 export function InlineApp() {
-    return (
-        <LanguageProvider
-            languages={["en", "jp", "de"]}
-            init={"jp"}
-            defaultTo={"en"}
-            remember={true}
-            header={exampleHeader}
-        >
+  const lang = useLanguage('inline-example')
+
+  return (
+      <LanguageProvider
+        languages={["en", "jp", "de"]}
+        init={'jp'}
+        defaultTo={"en"}
+        remember={true}
+        id="inline-example"
+        header={exampleHeader}
+      >
         <div className="App">
           <header className="App-header">
+            Current Language: {lang.get()}<br />
+            <button onClick={() => lang.set('en')}>Change to English</button>
             <LanguageDisplay>
+              <en>Hello</en><jp /><de /> {/* If a component at any dom level should
+              not be displayed for a specific language, simply add a void language
+              tag for that language at that dom level*/}
               <h1>
-                <en>Example App</en>
+                <en>Example App</en> {/* Each language tag will only be displayed if 
+                the corresponding language is selected. */}
                 <jp>事例</jp>
                 <de>Beispiel App</de>
               </h1>
@@ -80,7 +89,7 @@ const exampleLanguageSetup = {
   id: "json-example",
   remember: true,
   languages: ["en", "jp", "de"],
-  initialLanguage: "en",
+  init: "en",
   defaultTo: "en",
   header: {
     title: {
@@ -143,15 +152,21 @@ export function JsonApp() {
 - If you are using multiple LanguageProviders with localStorage active in your app, pass each of them a unique id if you want them to be able to remember different language settings.
 - Passing header data via json to the LanguageProvider causes it to use react-helmet to update header/meta tags dynamically. These can be overwritten using react-helmet at a nested level anywhere else in your app. Currently only supports title and meta tag!
 - If you are using multiple LanguageProviders that you pass header-data to, the last to render will always take priority, not the last to be updated! Therefore you should avoid using multiple LanguageProviders to update meta data, unless they update different tags.
+- For the language list, avoid names that are the same as html or jsx tags, if you are planning to use the inline LanguageDisplay component.
+- It is possible, and in certain scenarios necessary, to use both inline and json-based components. For example when wanting to display different text for the LanguageSelector buttons depending on the currently selected language, or when wanting to omitt entire components in some languages while primarily using the json-based component.
+- When using inline componentns, if a component at any dom level should not be displayed for a specific language, simply add a void language tag for that language at that dom level.
+- Generally avoid using multiple of the same language tags at the same dom level when using the inline component, as it may not behave as you expect if you omit any of the language tags listed in the languages list.
+- To use a language of one LanguageProvider within the scope of another LanguageProvider, use the useLanguage hook.
 
 ## Future Features
-[x] Storing language locally
-[x] JSON-based display component (LanguageText)
-[] JSON-based select component (void element LanguageSelect)
-[x] defaultTo (both for inline and json components)
-[x] Changing header and meta data per language
-[] Access and change current language outside of DOM
-[] External JSON-fetching
+- [x] Storing language locally
+- [x] JSON-based display component (LanguageText)
+- [ ] JSON-based select component (void element LanguageSelect)
+- [x] defaultTo (both for inline and json components)
+- [x] Changing header and meta data per language
+- [X] Access and change current language outside of DOM
+- [ ] External JSON-fetching
+- [ ] Make json.content more easily updatable from lower dom level?
 
 ## License
 

@@ -4,6 +4,32 @@ import { Helmet } from "react-helmet";
 export const LanguageContext = createContext()
 
 
+/**
+ * Context Provider with initialization and language settings. Should likely
+ * be placed at top level of the app if only one LanguagProvider is needed.
+ * @param {*} children List of jsx components. Do not pass this manually, simply
+ * wrap your app using the Language Provider.
+ * @param {Array<string>} languages List of language names that should be available
+ * in the app. Example: ['en', 'jp', 'de']. Avoid names that are the same as html or
+ * jsx tags, if you are planning to use the inline LanguageDisplay component.
+ * @param {string} init The language that the website should be initially loaded in.
+ * Will not do anything, if another language is stored locally and the app set to remember.
+ * Should correspond to the names used in the languages list.
+ * @param {string} defaultTo The language the display components should default to in case
+ * of a text not being available in a selected language. Should correspond to the names used
+ * in the languages list.
+ * @param {Set<any>} json JSON object containing language content, settings, and/or header/meta
+ * information. Any settings and header object is overwritten by any other props defined here. View
+ * github for example setups.
+ * @param {string} id Identifier for this specific language provider. Used to differentiate local
+ * storage in the case of multiple language providers in the same app. If you only use one language
+ * provider in your app, it is not required.
+ * @param {boolean} remember Set this to true to have the language provider save the user's
+ * selected language in localStorage.
+ * @param {Set<any>} header Set of header and meta information for display in multiple languages.
+ * View github for example setups.
+ * @returns {jsx}
+ */
 export default function LanguageProvider({
     children,
     languages,
@@ -18,17 +44,18 @@ export default function LanguageProvider({
     /*
     * EXPLICIT INITIALIZATION ------------------------------------------
     */
-    const providerId = id ? id : (json?.id ? json.id : '')
-    const languageList = languages ? languages : (json?.languages ? json.languages : ['en'])
-    const initialLanguage = init ? init : (json?.init ? json.init : 'en')
-    defaultTo = defaultTo ? defaultTo : (json?.defaultTo ? json.defaultTo : initialLanguage)
-    const content = json?.content ? json.content : {}
+    const providerId = id || json?.id || ''
+    const languageList = languages || json?.languages || ['en']
+    const initialLanguage = init || json?.init || 'en'
+    const content = json?.content || {}
     remember = remember ? true : (json?.remember ? json.remember : false)
-    header = header ? header : (json?.header ? json.header : {})
+    header = header || json?.header || {}
 
     const [lang, setLanguage] = useState(initialLanguage)
 
     const language = () => { return lang }
+
+    const localId = () => { return `lang-${providerId ? providerId : 0}` }
 
     /*
     * EXTERNAL JSON FETCHING ------------------------------------------
@@ -45,21 +72,38 @@ export default function LanguageProvider({
     /*
     * LOCAL STORAGE HANDLING ------------------------------------------
     */
-    const localId = `lang-${providerId ? providerId : 0}`
     // Local Storage Fetch Effect
     useEffect(() => {
         if (remember) {
-            const initFromLocal = localStorage.getItem(localId)
+            const initFromLocal = localStorage.getItem(localId())
             if (initFromLocal)
                 setLanguage(initFromLocal)
         }
     }, [])
 
-    // Local Storage Update Effect
+    // Local and Session Storage Update Effect
     useEffect(() => {
         if (remember)
-            localStorage.setItem(localId, lang)
+            localStorage.setItem(localId(), lang)
+
+        sessionStorage.setItem(localId(), lang)
+        window.dispatchEvent(new Event("storage"))
     }, [lang])
+
+    /*
+    * SESSION STORAGE HANDLING ------------------------------------------
+    * To trade info with language hook
+    */
+    const updateLang = () => {
+        const input = sessionStorage.getItem(localId())
+        setLanguage(input)
+    }
+    useEffect(() => {
+        window.addEventListener('storage', updateLang)
+        return () => {
+            window.removeEventListener('storage', updateLang)
+        }
+    })
 
     /*
     * RENDERING / PASSING ---------------------------------------------

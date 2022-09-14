@@ -1,6 +1,6 @@
 import React from 'react'
 
-import LanguageProvider, { LanguageDisplay, LanguageSelect, LanguageText } from 'react-language-switch';
+import LanguageProvider, { useLanguage, LanguageDisplay, LanguageSelect, LanguageText } from 'react-language-switch';
 
 // import useLanguage from './langModule/langHook';
 
@@ -23,9 +23,9 @@ const exampleHeader = {
 
 const exampleLanguageSetup = {
   id: "json-example",
-  remember: true,
+  remember: false,
   languages: ["en", "jp", "de"],
-  initialLanguage: "en",
+  init: "de",
   defaultTo: "en",
   content: {
     title: {
@@ -43,11 +43,14 @@ const exampleLanguageSetup = {
 }
 
 function App() {
+
+  const lang = useLanguage('inline-example')
+
   return (
     <>
       <LanguageProvider
         languages={["en", "jp", "de"]}
-        init={"jp"}
+        init={'jp'}
         defaultTo={"en"}
         remember={true}
         id="inline-example"
@@ -55,9 +58,15 @@ function App() {
       >
         <div className="App">
           <header className="App-header">
+            Current Language: {lang.get()}<br />
+            <button onClick={() => lang.set('en')}>Change to English</button>
             <LanguageDisplay>
+              <en>Hello</en><jp /><de /> {/* If a component at any dom level should
+              not be displayed for a specific language, simply add a void language
+              tag for that language at that dom level*/}
               <h1>
-                <en>Example App</en>
+                <en>Example App</en> {/* Each language tag will only be displayed if 
+                the corresponding language is selected. */}
                 <jp>事例</jp>
                 <de>Beispiel App</de>
               </h1>
