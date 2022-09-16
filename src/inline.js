@@ -48,7 +48,7 @@ export function LanguageDisplay({ children }) {
                         if (typeof (tag) === "object" && tag.type !== "br") {
                             const elem = React.createElement(
                                 tag.type,
-                                { key: i },
+                                { key: i, ...tag.props },
                                 <LanguageDisplay>{tag.props.children}</LanguageDisplay>
                             )
                             out.push(elem)
@@ -105,7 +105,7 @@ export function LanguageSelect({ children }) {
                         if (typeof (tag) === "object" && tag.type !== "br") {
                             const elem = React.createElement(
                                 tag.type,
-                                { key: i },
+                                { key: i, ...tag.props },
                                 <LanguageSelect>{tag.props.children}</LanguageSelect>
                             )
                             out.push(elem)

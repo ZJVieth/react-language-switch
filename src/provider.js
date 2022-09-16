@@ -50,6 +50,7 @@ export default function LanguageProvider({
     const content = json?.content || {}
     remember = remember ? true : (json?.remember ? json.remember : false)
     header = header || json?.header || {}
+    defaultTo = defaultTo || json?.defaultTo || initialLanguage
 
     const [lang, setLanguage] = useState(initialLanguage)
 
@@ -123,7 +124,7 @@ export default function LanguageProvider({
                                 useLang = key
                         })
                         if (!useLang)
-                            useLang = langVal.defaultTo
+                            useLang = defaultTo
                         return <meta key={metaObj.name} name={metaObj.name} content={metaObj[useLang]} />
                     })
                     : null

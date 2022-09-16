@@ -70,7 +70,7 @@ function App() {
                 <jp>事例</jp>
                 <de>Beispiel App</de>
               </h1>
-              <div className="name-display">
+              <div className="name-display" style={{ color: "red" }}>
                 <en>by Zino J. Vieth</en>
                 <jp>ヴィース　ジーノ　ジョエル　からです</jp>
                 {/* Omitting German here will cause it to default to the English text*/}

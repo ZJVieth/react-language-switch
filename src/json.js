@@ -10,6 +10,10 @@ import { LanguageContext } from 'react-language-switch'
  * @returns {jsx}
  */
 export default function LanguageText({ name }) {
+
+    if (!name)
+        throw 'The LanguageText component requires a "name" property corresponding to a key in your content object.';
+
     return (
         <LanguageContext.Consumer>
             {langVal => {
