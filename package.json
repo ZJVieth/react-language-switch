@@ -1,6 +1,6 @@
 {
   "name": "react-language-switch",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Simple context-based language-differentiating display and selector components for react.",
   "author": "ZJVieth",
   "license": "MIT",
@@ -8,6 +8,15 @@
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
+  "keywords": [
+    "react",
+    "language",
+    "component",
+    "context",
+    "inline",
+    "hook",
+    "json"
+  ],
   "engines": {
     "node": ">=10"
   },

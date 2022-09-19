@@ -157,16 +157,83 @@ export function JsonApp() {
 - When using inline componentns, if a component at any dom level should not be displayed for a specific language, simply add a void language tag for that language at that dom level.
 - Generally avoid using multiple of the same language tags at the same dom level when using the inline component, as it may not behave as you expect if you omit any of the language tags listed in the languages list.
 - To use a language of one LanguageProvider within the scope of another LanguageProvider, use the useLanguage hook.
+- If you are using components, that iterate over components, avoid using this library's inline components due to their recursive nature (creating a LanguageDisplay component inbetween each dom layer). See the following code for an example.
+```jsx
+// DO NOT DO => (because it will most likely lead to incorrect behaviour of your child-iterating component)
+<LanguageDisplay>
+  <Carousel>
+    <div>
+      <en>English language content</en>
+      <de>German language content</de>
+      <jp>Japanese language content</jp>
+    </div>
+    <div>
+      {/*...*/}
+    </div>
+  </Carousel>
+</LanguageDisplay>
+// Because this library will generate the following:
+<LanguageDisplay>
+  <Carousel>
+    <LanguageDisplay>
+      <div>
+        <LanguageDisplay>
+          <en>English language content</en>
+          <de>German language content</de>
+          <jp>Japanese language content</jp>
+        </LanguageDisplay>
+      </div> 
+      <div>
+        <LanguageDisplay>
+          {/*...*/}
+        </LanguageDisplay>
+      </div>
+      </LanguageDisplay>
+  </Carousel>
+</LanguageDisplay>
+
+// Optimally you should use the LanguageText component in this case or a custom mapping using the useLanguage hook or simply make sure that LanguageDisplay primarily wraps language tags:
+<Carousel>
+  <div>
+    <LanguageDisplay>
+      <en>English language content</en>
+      <de>German language content</de>
+      <jp>Japanese language content</jp>
+    </LanguageDisplay>
+  </div>
+  <div>
+      {/*...*/}
+  </div>
+</Carousel>
+```
 
 ## Future Features
-- [x] Storing language locally
-- [x] JSON-based display component (LanguageText)
 - [ ] JSON-based select component (void element LanguageSelect)
-- [x] defaultTo (both for inline and json components)
-- [x] Changing header and meta data per language
-- [X] Access and change current language outside of DOM
 - [ ] External JSON-fetching
 - [ ] Make json.content more easily updatable from lower dom level?
+
+## Version History
+
+### 1.0.4 Package and Readme Updates
+- Added keywords.
+- Updated usage notes.
+
+### 1.0.3 Quickfiy
+- Removed leftover console logs.
+
+### 1.0.2 Major Fixes
+- Fixed defaultTo bug when using json component.
+- Fixed a bug causing children of LanguageDisplay and LanguageSelect to lose their properties.
+- LanguageText now throws an error when no name-property is passed to it.
+
+### 1.0.1 Readme Fixes
+
+### 1.0.0 Original Release
+Containing
+- useLanguage
+- inline components: LanguageDisplay, LanguageSelect
+- json component: LanguageText
+- LanguageContext and LanguageProvider (mandatory to use)
 
 ## License
 
