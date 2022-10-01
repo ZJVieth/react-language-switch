@@ -110,6 +110,9 @@ function App() {
                 <de>DE</de>
               </LanguageSelect>
             </div>
+            <div>
+              {lang.getContent("title")}
+            </div>
           </header>
         </div>
       </LanguageProvider>

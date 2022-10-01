@@ -222,6 +222,8 @@ export function JsonApp() {
 
 ## Version History
 
+### 1.0.7 Quickfixed the Quickfix
+
 ### 1.0.6 getContent Quickfix
 
 ### 1.0.5 Hook Content Getter and Setter

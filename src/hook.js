@@ -42,13 +42,15 @@ export default function useLanguage(id) {
         if (json == null)
             useJson = JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
 
+        if (useJson == null)
+            return ""
+
         if (!useJson.content[name])
             return "undefined"
 
-
-        let out = json.content[name][lang]
+        let out = useJson.content[name][lang]
         if (!out)
-            out = json.content[name][json.defaultTo]
+            out = useJson.content[name][json.defaultTo]
         return out
     }
 
