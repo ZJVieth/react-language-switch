@@ -222,6 +222,8 @@ export function JsonApp() {
 
 ## Version History
 
+### 1.0.9 Now supports SSR
+
 ### 1.0.8 getContent defaultTo Bugfix
 - Fixed a bug where the app would crash if the defaultTo language would be used when calling useLanguage.getContent()
 

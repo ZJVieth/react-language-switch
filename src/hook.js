@@ -11,12 +11,14 @@ import { useState, useEffect } from "react"
  */
 export default function useLanguage(id) {
 
-    const [lang, setLang] = useState(sessionStorage.getItem(`lang-${id ? id : 0}`))
-    const [json, setJson] = useState(null) //JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+    const windowGlobal = typeof window !== 'undefined' && window
+
+    const [lang, setLang] = useState(null)
+    const [json, setJson] = useState(null)
 
     const updateLang = () => {
-        const lang_in = sessionStorage.getItem(`lang-${id ? id : 0}`)
-        const json_in = JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+        const lang_in = windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}`)
+        const json_in = JSON.parse(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}-json`))
 
         setLang(lang_in)
         setJson(json_in)
@@ -24,23 +26,27 @@ export default function useLanguage(id) {
 
     useEffect(() => {
         if (lang !== null)
-            sessionStorage.setItem(`lang-${id ? id : 0}`, lang)
+            windowGlobal.sessionStorage.setItem(`lang-${id ? id : 0}`, lang)
         if (json !== null)
-            sessionStorage.setItem(`lang-${id ? id : 0}-json`, JSON.stringify(json))
-        window.dispatchEvent(new Event('storage'))
+            windowGlobal.sessionStorage.setItem(`lang-${id ? id : 0}-json`, JSON.stringify(json))
+        windowGlobal.dispatchEvent(new Event('storage'))
     }, [lang, json])
 
     useEffect(() => {
-        window.addEventListener('storage', updateLang)
+
+        if (lang == null)
+            setLang(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}`))
+
+        windowGlobal.addEventListener('storage', updateLang)
         return () => {
-            window.removeEventListener('storage', updateLang)
+            windowGlobal.removeEventListener('storage', updateLang)
         }
     })
 
     const getContent = name => {
         let useJson = { ...json }
         if (json == null)
-            useJson = JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+            useJson = JSON.parse(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}-json`))
 
         if (useJson == null)
             return ""
@@ -57,7 +63,7 @@ export default function useLanguage(id) {
     const setContent = (name, val) => {
         let newJson = { ...json }
         if (json == null)
-            newJson = JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+            newJson = JSON.parse(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}-json`))
 
         newJson.content[name] = val
         setJson(newJson)

@@ -41,6 +41,8 @@ export default function LanguageProvider({
     header
 }) {
 
+    const windowGlobal = typeof window !== 'undefined' && window
+
     /*
     * EXPLICIT INITIALIZATION ------------------------------------------
     */
@@ -87,22 +89,22 @@ export default function LanguageProvider({
     // Local Storage Fetch Effect
     useEffect(() => {
         if (remember) {
-            const initFromLocal = localStorage.getItem(localId())
+            const initFromLocal = windowGlobal.localStorage.getItem(localId())
             if (initFromLocal)
                 setLanguage(initFromLocal)
         }
 
-        sessionStorage.setItem(`${localId()}-json`, JSON.stringify(jsonData))
+        windowGlobal.sessionStorage.setItem(`${localId()}-json`, JSON.stringify(jsonData))
     }, [])
 
     // Local and Session Storage Update Effect
     useEffect(() => {
         if (remember)
-            localStorage.setItem(localId(), lang)
+            windowGlobal.localStorage.setItem(localId(), lang)
 
-        sessionStorage.setItem(localId(), lang)
-        sessionStorage.setItem(`${localId()}-json`, JSON.stringify(jsonData))
-        window.dispatchEvent(new Event("storage"))
+        windowGlobal.sessionStorage.setItem(localId(), lang)
+        windowGlobal.sessionStorage.setItem(`${localId()}-json`, JSON.stringify(jsonData))
+        windowGlobal.dispatchEvent(new Event("storage"))
     }, [lang])
 
     /*
@@ -110,15 +112,15 @@ export default function LanguageProvider({
     * To trade info with language hook
     */
     const updateLang = () => {
-        const lang_in = sessionStorage.getItem(localId())
-        const json_in = JSON.parse(sessionStorage.getItem(`${localId()}-json`))
+        const lang_in = windowGlobal.sessionStorage.getItem(localId())
+        const json_in = JSON.parse(windowGlobal.sessionStorage.getItem(`${localId()}-json`))
         setLanguage(lang_in)
         setJsonData(json_in)
     }
     useEffect(() => {
-        window.addEventListener('storage', updateLang)
+        windowGlobal.addEventListener('storage', updateLang)
         return () => {
-            window.removeEventListener('storage', updateLang)
+            windowGlobal.removeEventListener('storage', updateLang)
         }
     })
 
