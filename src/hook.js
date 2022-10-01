@@ -50,7 +50,7 @@ export default function useLanguage(id) {
 
         let out = useJson.content[name][lang]
         if (!out)
-            out = useJson.content[name][json.defaultTo]
+            out = useJson.content[name][useJson.defaultTo]
         return out
     }
 

@@ -222,6 +222,9 @@ export function JsonApp() {
 
 ## Version History
 
+### 1.0.8 getContent defaultTo Bugfix
+- Fixed a bug where the app would crash if the defaultTo language would be used when calling useLanguage.getContent()
+
 ### 1.0.7 Quickfixed the Quickfix
 
 ### 1.0.6 getContent Quickfix
