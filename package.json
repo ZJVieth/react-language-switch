@@ -1,6 +1,6 @@
 {
   "name": "react-language-switch",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple context-based language-differentiating display and selector components for react.",
   "author": "ZJVieth",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0",
+    "react": "^18.0.0",
     "react-helmet": "^6.1.0"
   },
   "devDependencies": {

@@ -44,7 +44,7 @@ const exampleLanguageSetup = {
 
 function App() {
 
-  const lang = useLanguage('inline-example')
+  const lang = useLanguage('json-example')
 
   return (
     <>
@@ -60,6 +60,7 @@ function App() {
           <header className="App-header">
             Current Language: {lang.get()}<br />
             <button onClick={() => lang.set('en')}>Change to English</button>
+            <button onClick={() => lang.setContent("name", { en: "by some guy", de: "von sonem Typen", jp: "ばかからです" })}>Change Name</button>
             <LanguageDisplay>
               <en>Hello</en><jp /><de /> {/* If a component at any dom level should
               not be displayed for a specific language, simply add a void language

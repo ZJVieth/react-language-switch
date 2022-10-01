@@ -12,16 +12,23 @@ import { useState, useEffect } from "react"
 export default function useLanguage(id) {
 
     const [lang, setLang] = useState(sessionStorage.getItem(`lang-${id ? id : 0}`))
+    const [json, setJson] = useState(null) //JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
 
     const updateLang = () => {
-        const input = sessionStorage.getItem(`lang-${id ? id : 0}`)
-        setLang(input)
+        const lang_in = sessionStorage.getItem(`lang-${id ? id : 0}`)
+        const json_in = JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+
+        setLang(lang_in)
+        setJson(json_in)
     }
 
     useEffect(() => {
-        sessionStorage.setItem(`lang-${id ? id : 0}`, lang)
+        if (lang !== null)
+            sessionStorage.setItem(`lang-${id ? id : 0}`, lang)
+        if (json !== null)
+            sessionStorage.setItem(`lang-${id ? id : 0}-json`, JSON.stringify(json))
         window.dispatchEvent(new Event('storage'))
-    }, [lang])
+    }, [lang, json])
 
     useEffect(() => {
         window.addEventListener('storage', updateLang)
@@ -30,8 +37,29 @@ export default function useLanguage(id) {
         }
     })
 
+    const getContent = name => {
+        if (!json.content[name])
+            return "undefined"
+
+        let out = json.content[name][lang]
+        if (!out)
+            out = json.content[name][json.defaultTo]
+        return out
+    }
+
+    const setContent = (name, val) => {
+        let newJson = { ...json }
+        if (json == null)
+            newJson = JSON.parse(sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+
+        newJson.content[name] = val
+        setJson(newJson)
+    }
+
     return {
         get: () => { return lang },
-        set: setLang
+        set: setLang,
+        getContent,
+        setContent,
     }
 }

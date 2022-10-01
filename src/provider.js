@@ -52,7 +52,18 @@ export default function LanguageProvider({
     header = header || json?.header || {}
     defaultTo = defaultTo || json?.defaultTo || initialLanguage
 
+    json = {
+        id: providerId,
+        languages: languageList,
+        init: initialLanguage,
+        defaultTo,
+        remember,
+        content,
+        header
+    }
+
     const [lang, setLanguage] = useState(initialLanguage)
+    const [jsonData, setJsonData] = useState(json)
 
     const language = () => { return lang }
 
@@ -80,6 +91,8 @@ export default function LanguageProvider({
             if (initFromLocal)
                 setLanguage(initFromLocal)
         }
+
+        sessionStorage.setItem(`${localId()}-json`, JSON.stringify(jsonData))
     }, [])
 
     // Local and Session Storage Update Effect
@@ -88,6 +101,7 @@ export default function LanguageProvider({
             localStorage.setItem(localId(), lang)
 
         sessionStorage.setItem(localId(), lang)
+        sessionStorage.setItem(`${localId()}-json`, JSON.stringify(jsonData))
         window.dispatchEvent(new Event("storage"))
     }, [lang])
 
@@ -96,8 +110,10 @@ export default function LanguageProvider({
     * To trade info with language hook
     */
     const updateLang = () => {
-        const input = sessionStorage.getItem(localId())
-        setLanguage(input)
+        const lang_in = sessionStorage.getItem(localId())
+        const json_in = JSON.parse(sessionStorage.getItem(`${localId()}-json`))
+        setLanguage(lang_in)
+        setJsonData(json_in)
     }
     useEffect(() => {
         window.addEventListener('storage', updateLang)
@@ -112,12 +128,12 @@ export default function LanguageProvider({
     return (
         <React.Fragment>
             <Helmet>
-                {(header.title) ?
-                    <title>{header.title[language()]}</title>
+                {(jsonData?.header?.title) ?
+                    <title>{jsonData.header.title[language()]}</title>
                     : null
                 }
-                {(header.meta) ?
-                    header.meta.map(metaObj => {
+                {(jsonData?.header?.meta) ?
+                    jsonData.header.meta.map(metaObj => {
                         let useLang = null
                         Object.keys(metaObj).forEach(key => {
                             if (key === language())
@@ -134,13 +150,13 @@ export default function LanguageProvider({
                 value={{
                     language,
                     setLanguage,
-                    defaultTo,
-                    initialLanguage,
-                    languageList,
-                    content,
-                    providerId,
-                    remember,
-                    header
+                    defaultTo: jsonData?.defaultTo,
+                    initialLanguage: jsonData?.init,
+                    languageList: jsonData?.languages,
+                    content: jsonData?.content,
+                    providerId: jsonData?.id,
+                    remember: jsonData?.remember,
+                    header: jsonData?.header
                 }}
             >{children}</LanguageContext.Provider>
         </React.Fragment>

@@ -120,6 +120,10 @@ const exampleLanguageSetup = {
   }
 }
 export function JsonApp() {
+
+  const lang = useLanguage("json-example")
+
+  return (
     <LanguageProvider
         json={exampleLanguageSetup}
       >
@@ -140,9 +144,13 @@ export function JsonApp() {
                 <de>DE</de>
               </LanguageSelect>
             </div>
+            <button 
+              onClick={() => lang.setContent("name", { en: "by some guy", de: "von sonem Typen", jp: "ばかからです" })}
+            >Change Name</button>
           </header>
         </div>
       </LanguageProvider>
+  )
 }
 
 ```
@@ -157,7 +165,7 @@ export function JsonApp() {
 - When using inline componentns, if a component at any dom level should not be displayed for a specific language, simply add a void language tag for that language at that dom level.
 - Generally avoid using multiple of the same language tags at the same dom level when using the inline component, as it may not behave as you expect if you omit any of the language tags listed in the languages list.
 - To use a language of one LanguageProvider within the scope of another LanguageProvider, use the useLanguage hook.
-- If you are using components, that iterate over components, avoid using this library's inline components due to their recursive nature (creating a LanguageDisplay component inbetween each dom layer). See the following code for an example.
+- If you are using components that iterate over components, avoid using this library's inline components due to their recursive nature (creating a LanguageDisplay component inbetween each dom layer). See the following code for an example.
 ```jsx
 // DO NOT DO => (because it will most likely lead to incorrect behaviour of your child-iterating component)
 <LanguageDisplay>
@@ -214,11 +222,26 @@ export function JsonApp() {
 
 ## Version History
 
+### 1.0.5 Hook Content Getter and Setter
+- Made content accessible through the hook via
+```js
+const lang = useLanguage("[id]")
+lang.getContent("[name]")
+lang.setContent(
+  "[name]", 
+  {
+    en: "[english content]", 
+    de: "[german content]"
+  }
+)
+```
+
 ### 1.0.4 Package and Readme Updates
 - Added keywords.
 - Updated usage notes.
+- Added version history.
 
-### 1.0.3 Quickfiy
+### 1.0.3 Quickfix
 - Removed leftover console logs.
 
 ### 1.0.2 Major Fixes
