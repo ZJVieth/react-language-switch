@@ -218,9 +218,11 @@ export function JsonApp() {
 ## Future Features
 - [ ] JSON-based select component (void element LanguageSelect)
 - [ ] External JSON-fetching
-- [ ] Make json.content more easily updatable from lower dom level?
+- [X] Make json.content more easily updatable from lower dom level?
 
 ## Version History
+
+### 1.0.6 getContent Quickfix
 
 ### 1.0.5 Hook Content Getter and Setter
 - Made content accessible through the hook via

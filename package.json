@@ -1,6 +1,6 @@
 {
   "name": "react-language-switch",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simple context-based language-differentiating display and selector components for react.",
   "author": "ZJVieth",
   "license": "MIT",
