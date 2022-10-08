@@ -20,8 +20,11 @@ export default function useLanguage(id) {
         const lang_in = windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}`)
         const json_in = JSON.parse(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}-json`))
 
-        setLang(lang_in)
-        setJson(json_in)
+        if (lang_in !== lang)
+            setLang(lang_in)
+
+        if (JSON.stringify(json_in) === JSON.stringify(json))
+            setJson(json_in)
     }
 
     useEffect(() => {
@@ -41,7 +44,7 @@ export default function useLanguage(id) {
         return () => {
             windowGlobal.removeEventListener('storage', updateLang)
         }
-    })
+    }, [lang, json])
 
     const getContent = name => {
         let useJson = { ...json }

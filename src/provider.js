@@ -122,7 +122,7 @@ export default function LanguageProvider({
         return () => {
             windowGlobal.removeEventListener('storage', updateLang)
         }
-    })
+    }, [])
 
     /*
     * RENDERING / PASSING ---------------------------------------------

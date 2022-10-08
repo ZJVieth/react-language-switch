@@ -218,9 +218,14 @@ export function JsonApp() {
 ## Future Features
 - [ ] JSON-based select component (void element LanguageSelect)
 - [ ] External JSON-fetching
-- [X] Make json.content more easily updatable from lower dom level?
+- [ ] UserAgent / browser language preset
 
 ## Version History
+
+### 1.0.11 useLanguage Fix
+- Fixed a bug causing useLanguage to continually send storage updates causing a "max render update depth exceeded" error.
+
+### 1.0.10 Quickfixed SSR Support
 
 ### 1.0.9 Now supports SSR
 

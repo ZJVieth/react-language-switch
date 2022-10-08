@@ -2,6 +2,8 @@ import React from 'react'
 
 import LanguageProvider, { useLanguage, LanguageDisplay, LanguageSelect, LanguageText } from 'react-language-switch';
 
+import Component from './Component'
+
 // import useLanguage from './langModule/langHook';
 
 
@@ -115,6 +117,7 @@ function App() {
             </div>
           </header>
         </div>
+        <Component />
       </LanguageProvider>
     </>
   )
