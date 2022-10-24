@@ -222,6 +222,12 @@ export function JsonApp() {
 
 ## Version History
 
+### 1.0.13 useLanguage JSON parse error
+- Fixed a json.parse() crash-causing bug.
+
+### 1.0.12 useLanguage SSR Fix
+- Fixed a bug that caused useLanguage to cause a crash when called in specific situations.
+
 ### 1.0.11 useLanguage Fix
 - Fixed a bug causing useLanguage to continually send storage updates causing a "max render update depth exceeded" error.
 

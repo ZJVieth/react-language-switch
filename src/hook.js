@@ -49,7 +49,7 @@ export default function useLanguage(id) {
     const getContent = name => {
         let useJson = { ...json }
         if (json == null)
-            useJson = JSON.parse(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+            useJson = JSON.parse(windowGlobal.sessionStorage?.getItem(`lang-${id ? id : 0}-json`) || "null")
 
         if (useJson == null)
             return ""
@@ -66,7 +66,10 @@ export default function useLanguage(id) {
     const setContent = (name, val) => {
         let newJson = { ...json }
         if (json == null)
-            newJson = JSON.parse(windowGlobal.sessionStorage.getItem(`lang-${id ? id : 0}-json`))
+            newJson = JSON.parse(windowGlobal.sessionStorage?.getItem(`lang-${id ? id : 0}-json`) || "null")
+
+        if (newJson == null)
+            return
 
         newJson.content[name] = val
         setJson(newJson)
